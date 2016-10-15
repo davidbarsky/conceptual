@@ -3,7 +3,7 @@ package Graph
 import java.util.ArrayList
 
 import scala.util.control.Breaks.{break, breakable}
-import Data.{Task, TaskQueue, TaskStatus}
+import Data.{Task, TaskQueue, Readiness}
 
 object Actualizer {
   def makeSchedule(tasks: List[TaskQueue]): Unit = {
@@ -13,23 +13,14 @@ object Actualizer {
     for (queue: TaskQueue <- tasks) {
       breakable {
         val task: Task = queue.tasks.peek()
-        if (this.filterIncompleteDependencies(task.dependencies)) {
-          val task: Task = queue.tasks.take()
-          logicalSchedule.add(task)
-        } else {
-          break()
+        task.buildReadiness match {
+          case Readiness.Ready => {
+            val task: Task = queue.tasks.take()
+            logicalSchedule.add(task)
+          }
+          case _ => break()
         }
       }
     }
-  }
-
-  def filterIncompleteDependencies(dependencies: List[Task]): Boolean = {
-    for (task: Task <- dependencies) {
-      if (task.status == TaskStatus.Incomplete) {
-        return false
-      }
-    }
-
-    return true
   }
 }

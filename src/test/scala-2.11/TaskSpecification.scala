@@ -31,3 +31,20 @@ object EmptyDependencyListSpecification extends Properties("Task") {
     t.buildReadiness == Readiness.Ready
   }
 }
+
+object BuildableTaskSpecification extends Properties("Task") {
+  val builtTask: Task = {
+    Task("A", BuildStatus.Built, None, List[Task]())
+  }
+
+  val genBuildableTask: Gen[Task] = for {
+    name <- Gen.oneOf("A", "B", "C")
+    startEndTime <- Gen.wrap(None)
+    dependencies <- Gen.nonEmptyListOf(builtTask)
+  } yield Task(name, BuildStatus.NotBuilt, startEndTime, dependencies)
+  implicit val arbTask = Arbitrary(genBuildableTask)
+
+  property("Task is buildable") = forAll { (t: Task) =>
+    t.buildReadiness == Readiness.Ready
+  }
+}

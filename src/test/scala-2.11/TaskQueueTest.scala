@@ -14,6 +14,8 @@ import scala.collection.mutable.Builder
 
 object TaskQueueSpecification extends Properties("TaskQueue") {
 
+  // Built using
+  // http://stackoverflow.com/questions/39704941/scalacheck-new-buildable-instances
   implicit def buildableLinkedList[T]: Buildable[T, LinkedList[T]] =
     new Buildable[T, LinkedList[T]] {
       override def builder = new Builder[T, LinkedList[T]] {
@@ -48,11 +50,12 @@ object TaskQueueSpecification extends Properties("TaskQueue") {
   } yield TaskQueue(tasks, MachineType.Small)
   implicit val arbTaskQueue = Arbitrary(genTaskQueue)
 
-  property("TaskQueue.take() take buildable tasks") = forAll { taskQueue: TaskQueue =>
-    val task = taskQueue.take()
-    task match {
-      case Some(t: Task) => t.buildReadiness == Readiness.Ready
-      case None => true == true
-    }
+  property("TaskQueue.take() take buildable tasks") = forAll {
+    taskQueue: TaskQueue =>
+      val task = taskQueue.take()
+      task match {
+        case Some(t: Task) => t.buildReadiness == Readiness.Ready
+        case None => true == true
+      }
   }
 }

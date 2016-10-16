@@ -15,7 +15,7 @@ object Actualizer {
         val task: Task = queue.tasks.peek()
         task.buildReadiness match {
           case Readiness.Ready => {
-            val task: Task = queue.tasks.take()
+            val task: Task = queue.tasks.pop()
             logicalSchedule.add(task)
           }
           case _ => break()

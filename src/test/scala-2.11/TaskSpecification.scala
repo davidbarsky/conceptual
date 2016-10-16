@@ -1,4 +1,4 @@
-import Data.{Task, BuildStatus, Readiness}
+import Data.{BuildStatus, Readiness, StartEndTime, Task}
 import org.scalacheck.{Gen, Properties}
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Arbitrary
@@ -34,8 +34,10 @@ object EmptyDependencyListSpecification extends Properties("Task") {
 }
 
 object BuildableTaskSpecification extends Properties("Task") {
+  val startEnd: StartEndTime = StartEndTime(0, 10)
+
   val builtTask: Task = {
-    Task("A", BuildStatus.Built, None, List[Task]())
+    Task("A", BuildStatus.Built, Some(startEnd), List[Task]())
   }
 
   val genBuildableTask: Gen[Task] = for {
@@ -45,7 +47,17 @@ object BuildableTaskSpecification extends Properties("Task") {
   } yield Task(name, BuildStatus.NotBuilt, startEndTime, dependencies)
   implicit val arbTask = Arbitrary(genBuildableTask)
 
-  property("Task is buildable") = forAll { t: Task =>
-    t.buildReadiness == Readiness.Ready
+  property("Task is buildable") = forAll { current: Task =>
+    val startEnd: StartEndTime = StartEndTime(0, 10)
+    val previous = Task("A", BuildStatus.Built, Some(startEnd), List[Task]())
+
+    current.buildStatus == BuildStatus.NotBuilt
+    current.buildReadiness == Readiness.Ready
+
+    // mutable state transition...
+    current.build(Some(previous), 10)
+
+    current.buildStatus == BuildStatus.Built
+    current.startEndTime.get.end == 20
   }
 }

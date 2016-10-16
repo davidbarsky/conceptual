@@ -6,13 +6,25 @@ case class Task(val name: String,
                 var startEndTime: Option[StartEndTime] = None,
                 val dependencies: List[Task]) {
 
-  def build(previous: Task, cost: Int): Unit = {
-    this.buildStatus = BuildStatus.Built
+  def build(previous: Option[Task], cost: Int): Unit = {
+    val startTime: Int = previous match {
+      case Some(prev) =>
+        prev.startEndTime match {
+          case Some(prevTime) => prevTime.end
+          case None => 0
+        }
+      case None => 0
+    }
+
+    val endTime: Int = startTime + cost
     this.startEndTime = Some(
-      StartEndTime(
-        previous.startEndTime.get.start,
-        cost
-      ))
+        StartEndTime(
+          startTime,
+          endTime
+        )
+    )
+
+    this.buildStatus = BuildStatus.Built
   }
 
   var buildReadiness: Readiness = {

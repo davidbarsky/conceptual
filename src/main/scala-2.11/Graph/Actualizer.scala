@@ -12,13 +12,13 @@ object Actualizer {
 
     for (queue: TaskQueue <- tasks) {
       breakable {
-        val task: Task = queue.tasks.peek()
-        task.buildReadiness match {
-          case Readiness.Ready => {
-            val task: Task = queue.tasks.pop()
+        val task: Option[Task] = queue.take()
+        task match {
+          case Some(task) => {
             logicalSchedule.add(task)
+            previous = Some(task)
           }
-          case _ => break()
+          case None => break()
         }
       }
     }

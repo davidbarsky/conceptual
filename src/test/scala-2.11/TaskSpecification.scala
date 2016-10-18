@@ -15,7 +15,7 @@ object IncompleteDependencyListSpecification extends Properties("Task") {
   } yield Task(name, BuildStatus.NotBuilt, startEndTime, dependencies)
   implicit val arbTask = Arbitrary(genNotReadyTask)
 
-  property("Task is not ready if its dependencies are not built") = Prop.forAll {
+  property("buildReadiness == Readiness.NotReady if its dependencies are not built") = Prop.forAll {
     t: Task =>
       t.buildReadiness == Readiness.NotReady
   }
@@ -28,7 +28,7 @@ object EmptyDependencyListSpecification extends Properties("Task") {
   } yield Task(name, BuildStatus.NotBuilt, startEndTime, List[Task]())
   implicit val arbTask = Arbitrary(genReadyTask)
 
-  property("Task is ready if it has no dependencies") = Prop.forAll { t: Task =>
+  property("buildReadiness == Readiness.Ready if it has no dependencies") = Prop.forAll { t: Task =>
     t.buildReadiness == Readiness.Ready
   }
 }
@@ -47,7 +47,7 @@ object BuildableTaskSpecification extends Properties("Task") {
   } yield Task(name, BuildStatus.NotBuilt, startEndTime, dependencies)
   implicit val arbTask = Arbitrary(genBuildableTask)
 
-  property("is buildable") = Prop.forAll { current: Task =>
+  property("build() builds a task") = Prop.forAll { current: Task =>
     val startEnd: StartEndTime = StartEndTime(0, 10)
     val previous = Task("A", BuildStatus.Built, Some(startEnd), List[Task]())
 

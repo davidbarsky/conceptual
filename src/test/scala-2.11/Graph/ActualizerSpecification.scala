@@ -21,7 +21,7 @@ class ActualizerSpecification extends Properties("Actualizer") {
   implicit val genDAG: Arbitrary[Array[TaskQueue]] = Arbitrary(
     Gen.containerOfN[Array, TaskQueue](1, genTaskQueue))
 
-  property("makeSchedule() builds a schedule for a singly-linked graph") =
+  property("makeSchedule() returns a list of built tasks") =
     Prop.forAll { taskList: Array[TaskQueue] =>
       val builtTasks: Array[Task] = Actualizer.makeSchedule(taskList)
 

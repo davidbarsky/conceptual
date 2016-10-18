@@ -12,7 +12,7 @@ import Data._
 
 import scala.collection.mutable.Builder
 
-object TaskQueueSpecification extends Properties("TaskQueue") {
+object TaskQueueTest extends Properties("TaskQueue") {
 
   // Built using
   // http://stackoverflow.com/questions/39704941/scalacheck-new-buildable-instances

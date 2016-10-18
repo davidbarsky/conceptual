@@ -18,10 +18,10 @@ case class Task(val name: String,
 
     val endTime: Int = startTime + cost
     this.startEndTime = Some(
-        StartEndTime(
-          startTime,
-          endTime
-        )
+      StartEndTime(
+        startTime,
+        endTime
+      )
     )
 
     this.buildStatus = BuildStatus.Built

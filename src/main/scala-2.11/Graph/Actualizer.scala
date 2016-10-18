@@ -3,10 +3,10 @@ package Graph
 import java.util.ArrayList
 
 import scala.util.control.Breaks.{break, breakable}
-import Data.{Task, TaskQueue, Readiness}
+import Data.{Task, TaskQueue}
 
 object Actualizer {
-  def makeSchedule(tasks: List[TaskQueue]): Unit = {
+  def makeSchedule(tasks: List[TaskQueue]): ArrayList[Task] = {
     val logicalSchedule: ArrayList[Task] = new ArrayList[Task]()
     var previous: Option[Task] = Option.empty
 
@@ -22,5 +22,6 @@ object Actualizer {
         }
       }
     }
+    return logicalSchedule
   }
 }

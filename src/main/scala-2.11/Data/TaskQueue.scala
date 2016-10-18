@@ -2,9 +2,7 @@ package Data
 
 import java.util.LinkedList
 
-case class TaskQueue(val tasks: LinkedList[Task],
-                     val machineType: MachineType) {
-
+case class TaskQueue(val tasks: LinkedList[Task], val machineType: MachineType) {
   def take(): Option[Task] = {
     if (tasks.isEmpty) {
       return None

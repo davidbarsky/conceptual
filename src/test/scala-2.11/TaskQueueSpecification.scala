@@ -28,7 +28,7 @@ object TaskQueueSpecification extends Properties("TaskQueue") {
   } yield TaskQueue(tasks, MachineType.Small)
   implicit val arbTaskQueue = Arbitrary(genTaskQueue)
 
-  property("TaskQueue.take() take buildable tasks") = forAll {
+  property("take() take buildable tasks") = forAll {
     taskQueue: TaskQueue =>
       val task = taskQueue.take()
       task match {

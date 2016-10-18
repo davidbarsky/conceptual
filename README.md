@@ -7,7 +7,7 @@ conceptual, when given a directed acyclic graph, creates a logical schedule.
 ## Installation
 
 Requirements:
-- [`ggen`](https://github.com/perarnau/ggen). No Homebrew formula exists, you'll need to build it yourself.
+- [`ggen`](https://github.com/perarnau/ggen) (no `brew` formula exists, you'll need to build it yourself.)
 - [`sbt`](http://www.scala-sbt.org/download.html)
 
 Then:

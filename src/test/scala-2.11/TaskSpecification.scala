@@ -1,7 +1,7 @@
-import Data.{BuildStatus, Readiness, StartEndTime, Task}
-import org.scalacheck.{Gen, Properties}
-import org.scalacheck.Prop.forAll
+import org.scalacheck.{Gen, Properties, Prop}
 import org.scalacheck.Arbitrary
+
+import Data.{BuildStatus, Readiness, StartEndTime, Task}
 
 object IncompleteDependencyListSpecification extends Properties("Task") {
   val incompleteTask: Task = {
@@ -15,7 +15,7 @@ object IncompleteDependencyListSpecification extends Properties("Task") {
   } yield Task(name, BuildStatus.NotBuilt, startEndTime, dependencies)
   implicit val arbTask = Arbitrary(genNotReadyTask)
 
-  property("Task is not ready if its dependencies are not built") = forAll {
+  property("Task is not ready if its dependencies are not built") = Prop.forAll {
     t: Task =>
       t.buildReadiness == Readiness.NotReady
   }
@@ -28,7 +28,7 @@ object EmptyDependencyListSpecification extends Properties("Task") {
   } yield Task(name, BuildStatus.NotBuilt, startEndTime, List[Task]())
   implicit val arbTask = Arbitrary(genReadyTask)
 
-  property("Task is ready if it has no dependencies") = forAll { t: Task =>
+  property("Task is ready if it has no dependencies") = Prop.forAll { t: Task =>
     t.buildReadiness == Readiness.Ready
   }
 }
@@ -47,7 +47,7 @@ object BuildableTaskSpecification extends Properties("Task") {
   } yield Task(name, BuildStatus.NotBuilt, startEndTime, dependencies)
   implicit val arbTask = Arbitrary(genBuildableTask)
 
-  property("Task is buildable") = forAll { current: Task =>
+  property("Task is buildable") = Prop.forAll { current: Task =>
     val startEnd: StartEndTime = StartEndTime(0, 10)
     val previous = Task("A", BuildStatus.Built, Some(startEnd), List[Task]())
 

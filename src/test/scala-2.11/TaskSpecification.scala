@@ -48,7 +48,7 @@ object BuildableTaskSpecification extends Properties("Task") {
   implicit val arbTask = Arbitrary(genBuildableTask)
 
   property("build() builds a task") = Prop.forAll { current: Task =>
-    val startEnd: StartEndTime = StartEndTime(0, 10)
+    val startEnd: StartEndTime = StartEndTime(0, 1)
     val previous = Task("A", BuildStatus.Built, Some(startEnd), List[Task]())
 
     current.buildStatus == BuildStatus.NotBuilt
@@ -57,9 +57,9 @@ object BuildableTaskSpecification extends Properties("Task") {
     // mutable state transition...
     // building here because Actualizer.makeSchedule() normally would
     // handle building.
-    current.build(Some(previous), 10)
+    current.build(Some(previous), 1)
 
     current.buildStatus == BuildStatus.Built
-    current.startEndTime.get.end == 20
+    current.startEndTime.get.end == 2
   }
 }

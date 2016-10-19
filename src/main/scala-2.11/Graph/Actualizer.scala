@@ -15,6 +15,7 @@ object Actualizer {
         val task: Option[Task] = queue.take()
         task match {
           case Some(task) => {
+            task.build(previous, 1)
             logicalSchedule += (task)
             previous = Some(task)
           }

@@ -25,10 +25,8 @@ class ActualizerSpecification extends Properties("Actualizer") {
     Prop.forAll { taskList: Array[TaskQueue] =>
       val builtTasks: Array[Task] = Actualizer.makeSchedule(taskList)
 
-      def isBuilt(t: Task): Boolean = {
+      builtTasks.length == builtTasks.count { t: Task =>
         t.buildStatus == BuildStatus.Built
       }
-
-      builtTasks.length == builtTasks.filterNot(isBuilt).length
     }
 }

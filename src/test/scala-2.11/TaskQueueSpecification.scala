@@ -1,14 +1,12 @@
 import java.util.LinkedList
 
-import org.scalacheck.Properties
-import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Prop.forAll
+import org.scalacheck.{Arbitrary, Gen, Prop, Properties}
 
 import language.implicitConversions
 import Data._
 
 object TaskQueueSpecification extends Properties("TaskQueue") {
-  import JavaCollectionGenerator._
+  import Generators.JavaCollections._
 
   val incompleteTask: Task = {
     Task("A", BuildStatus.NotBuilt, None, List[Task]())
@@ -21,14 +19,14 @@ object TaskQueueSpecification extends Properties("TaskQueue") {
   } yield Task(name, BuildStatus.NotBuilt, startEndTime, dependencies)
   implicit val arbTask = Arbitrary(genReadyTask)
 
-  val genLBQ = Gen.containerOf[LinkedList, Task](genReadyTask)
+  val taskQueue = Gen.containerOf[LinkedList, Task](genReadyTask)
 
   val genTaskQueue: Gen[TaskQueue] = for {
-    tasks <- genLBQ
+    tasks <- taskQueue
   } yield TaskQueue(tasks, MachineType.Small)
   implicit val arbTaskQueue = Arbitrary(genTaskQueue)
 
-  property("take() returns buildable tasks") = forAll {
+  property("take() returns buildable tasks") = Prop.forAll {
     taskQueue: TaskQueue =>
       val task = taskQueue.take()
       task match {

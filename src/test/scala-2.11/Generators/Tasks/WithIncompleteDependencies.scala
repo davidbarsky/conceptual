@@ -1,13 +1,9 @@
-package Generators
-
-import java.util.LinkedList
+package Generators.Tasks
 
 import Data.{BuildStatus, Task}
 import org.scalacheck.{Arbitrary, Gen}
 
-object TaskWithUnbuiltDependenciesGen {
-  import JavaCollectionGen._
-
+object WithIncompleteDependencies {
   val incompleteTask: Task = {
     Task("A", BuildStatus.NotBuilt, None, List[Task]())
   }
@@ -17,7 +13,5 @@ object TaskWithUnbuiltDependenciesGen {
     startEndTime <- Gen.wrap(None)
     dependencies <- Gen.nonEmptyListOf(incompleteTask)
   } yield Task(name, BuildStatus.NotBuilt, startEndTime, dependencies)
-  implicit val arbTask = Arbitrary(taskWithDependencies)
-
-  val genLBQ = Gen.containerOf[LinkedList, Task](taskWithDependencies)
+  implicit val arbitraryTask = Arbitrary(taskWithDependencies)
 }

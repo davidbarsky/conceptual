@@ -1,11 +1,11 @@
-import java.util.{LinkedList}
+import java.util.LinkedList
 
-import org.scalacheck.{Arbitrary, Gen, Prop, Properties}
-import Data.{BuildStatus, MachineType, StartEndTime, Task, TaskQueue}
+import Data.{BuildStatus, MachineType, Task, TaskQueue}
 import Graph.Actualizer
+import org.scalacheck.{Arbitrary, Gen, Prop, Properties}
 
 class ActualizerSpecification extends Properties("Actualizer") {
-  import JavaCollectionGenerator._
+  import Generators.JavaCollections._
 
   // Arbitrary Task Generation
   val genTask: Gen[Task] = Gen.wrap {
@@ -21,12 +21,12 @@ class ActualizerSpecification extends Properties("Actualizer") {
   implicit val genDAG: Arbitrary[Array[TaskQueue]] = Arbitrary(
     Gen.containerOfN[Array, TaskQueue](1, genTaskQueue))
 
-  property("makeSchedule() returns a list of built tasks") =
-    Prop.forAll { taskList: Array[TaskQueue] =>
+  property("makeSchedule() returns a list of built tasks") = Prop.forAll {
+    taskList: Array[TaskQueue] =>
       val builtTasks: Array[Task] = Actualizer.makeSchedule(taskList)
 
       builtTasks.length == builtTasks.count { t: Task =>
         t.buildStatus == BuildStatus.Built
       }
-    }
+  }
 }

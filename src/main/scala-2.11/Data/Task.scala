@@ -1,10 +1,12 @@
 package Data
 
-case class StartEndTime(val start: Integer, val end: Integer)
-case class Task(val name: String,
+import java.util.ArrayList
+
+case class StartEndTime(val start: Int, val end: Int)
+case class Task(val ID: Int,
                 var buildStatus: BuildStatus = BuildStatus.NotBuilt,
                 var startEndTime: Option[StartEndTime] = None,
-                val dependencies: List[Task]) {
+                val dependencies: List[Int]) {
 
   def build(previous: Option[Task], cost: Int): Unit = {
     val startTime: Int = previous match {
@@ -27,24 +29,13 @@ case class Task(val name: String,
     this.buildStatus = BuildStatus.Built
   }
 
-  var buildReadiness: Readiness = {
-    val hasUnbuilt = this.dependencies.exists { (t: Task) =>
-      t.buildStatus == BuildStatus.NotBuilt
-    }
-
-    hasUnbuilt match {
-      case true => Readiness.NotReady
-      case false => Readiness.Ready
-    }
-  }
-
   override def equals(obj: scala.Any): Boolean = {
     val other = obj match {
       case other: Task => other
       case _ => throw new ClassCastException
     }
 
-    return other.name == this.name match {
+    return other.ID == this.ID match {
       case true => true
       case false => false
     }

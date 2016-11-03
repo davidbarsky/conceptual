@@ -5,8 +5,8 @@ import org.scalacheck.{Arbitrary, Gen}
 
 object WithNoDependencies {
   val genReadyTask: Gen[Task] = for {
-    name <- Gen.oneOf("A", "B", "C")
+    id <- Gen.choose(1, 100)
     startEndTime <- Gen.wrap(None)
-  } yield Task(name, BuildStatus.NotBuilt, startEndTime, List[Task]())
+  } yield Task(id, BuildStatus.NotBuilt, startEndTime, List[Int]())
   implicit val arbTask = Arbitrary(genReadyTask)
 }

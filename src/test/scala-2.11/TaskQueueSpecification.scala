@@ -8,15 +8,11 @@ import Data._
 object TaskQueueSpecification extends Properties("TaskQueue") {
   import Generators.JavaCollections._
 
-  val incompleteTask: Task = {
-    Task("A", BuildStatus.NotBuilt, None, List[Task]())
-  }
-
   val genReadyTask: Gen[Task] = for {
-    name <- Gen.oneOf("A", "B", "C")
+    id <- Gen.oneOf(1, 2, 3)
     startEndTime <- Gen.wrap(None)
-    dependencies <- Gen.nonEmptyListOf(incompleteTask)
-  } yield Task(name, BuildStatus.NotBuilt, startEndTime, dependencies)
+    dependencies <- Gen.listOf(Gen.choose(1, 5))
+  } yield Task(id, BuildStatus.NotBuilt, startEndTime, dependencies)
   implicit val arbTask = Arbitrary(genReadyTask)
 
   val taskQueue = Gen.containerOf[LinkedList, Task](genReadyTask)

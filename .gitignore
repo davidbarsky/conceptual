@@ -53,3 +53,7 @@ fabric.properties
 modules.xml
 .idea/misc.xml 
 *.ipr
+
+# ensime
+.ensime
+.enime_cache/

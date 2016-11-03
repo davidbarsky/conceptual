@@ -2,11 +2,10 @@ name := "Conceptual"
 version := "1.0"
 scalaVersion := "2.11.8"
 
-resolvers += "git-ryanmarcus" at "https://github.com/RyanMarcus/maven-repo/raw/master/"
 scalacOptions ++= Seq("-feature")
 
 libraryDependencies ++= Seq(
-  "edu.brandeis" % "ggen4j" % "0.0.1",
+  "info.rmarcus" % "ggen4j" % "0.1.0",
   "com.beachape" %% "enumeratum" % "1.4.15",
   "org.scalacheck" %% "scalacheck" % "1.12.5" % "test"
 )

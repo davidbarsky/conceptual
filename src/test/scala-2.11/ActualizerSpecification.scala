@@ -9,7 +9,7 @@ class ActualizerSpecification extends Properties("Actualizer") {
 
   // Arbitrary Task Generation
   val genTask: Gen[Task] = Gen.wrap {
-    Task("A", BuildStatus.NotBuilt, None, List[Task]())
+    Task(1, BuildStatus.NotBuilt, None, List[Int]())
   }
 
   val genLBQ = Gen.containerOf[LinkedList, Task](genTask)

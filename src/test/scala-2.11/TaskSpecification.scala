@@ -25,10 +25,9 @@ object BuildableTaskSpecification extends Properties("Task") {
 
   property("build() builds a task") = Prop.forAll { current: Task =>
     val startEnd: StartEndTime = StartEndTime(0, 1)
-    val previous = Task("A", BuildStatus.Built, Some(startEnd), List[Task]())
+    val previous = Task(1, BuildStatus.Built, Some(startEnd), List[Int]())
 
     current.buildStatus == BuildStatus.NotBuilt
-    current.buildReadiness == Readiness.Ready
 
     // building here because Actualizer.makeSchedule() normally would
     // handle building.

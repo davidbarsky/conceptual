@@ -7,13 +7,13 @@ object WithCompleteDependencies {
   val startEnd: StartEndTime = StartEndTime(0, 10)
 
   val builtTask: Task = {
-    Task("A", BuildStatus.Built, Some(startEnd), List[Task]())
+    Task(1, BuildStatus.Built, Some(startEnd), List[Int]())
   }
 
   val genBuildableTask: Gen[Task] = for {
-    name <- Gen.oneOf("A", "B", "C")
+    id <- Gen.choose(1, 100)
     startEndTime <- Gen.wrap(None)
-    dependencies <- Gen.nonEmptyListOf(builtTask)
-  } yield Task(name, BuildStatus.NotBuilt, startEndTime, dependencies)
+    dependencies <- Gen.listOf(Gen.choose(1, 5))
+  } yield Task(id, BuildStatus.NotBuilt, startEndTime, dependencies)
   implicit val arbTask = Arbitrary(genBuildableTask)
 }
